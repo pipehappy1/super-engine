@@ -30,7 +30,7 @@ def test_globalpooling():
 
     network.build()
 
-    f = h5py.File('/hdd/home/yueguan/workspace/data/mnist/mnist.hdf5', 'r')
+    f = h5py.File('/home/xtop/workspace/team_work/data/mnist.hdf5', 'r')
 
     trX = f['x_train'][:,:].reshape(-1, 1, 28, 28)
     teX = f['x_test'][:,:].reshape(-1, 1, 28, 28)
