@@ -111,6 +111,13 @@ class TestFullConn(unittest.TestCase):
         y_shape = y[0].eval().shape
         self.assertEqual(y_shape, (500, 10))
         
+<<<<<<< Updated upstream
+=======
+<<<<<<< e0b7f09fff8171dbb261174ca26758ba8d783664
+if __name__ == " __main__":
+    unittest.main()
+=======
+>>>>>>> Stashed changes
 class TestSoftmax(unittest.TestCase):
     
     def test_softmax_forwardSize(self):
@@ -155,4 +162,9 @@ if __name__ == '__main__':
     suite7 = unittest.TestLoader().loadTestsFromTestCase(TestBatchNormalization)
     
     allTest = unittest.TestSuite([suite1, suite2, suite3, suite4, suite5, suite6, suite7])
+<<<<<<< Updated upstream
     unittest.TextTestRunner(verbosity=2).run(allTest)
+=======
+    unittest.TextTestRunner(verbosity=2).run(allTest)
+>>>>>>> unitetst1
+>>>>>>> Stashed changes
