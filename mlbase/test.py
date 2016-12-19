@@ -3,6 +3,7 @@ import h5py
 import numpy as np
 import activation as act
 import mlbase.loaddata as l
+import mlbase.layers as layers
 
 def testload():
     n = N.Network()
@@ -12,18 +13,18 @@ def testload():
 def test_maxout():
     network = N.Network()
 
-    network.setInput(N.RawInput((1, 28,28)))
-    network.append(N.Conv2d(filter_size=(3,3), feature_map_multiplier=128))
-    network.append(N.FeaturePooling(4))
-    network.append(N.Pooling((2,2)))
-    network.append(N.Conv2d(filter_size=(3,3), feature_map_multiplier=8))
-    network.append(N.FeaturePooling(4))
-    network.append(N.Pooling((2,2)))
-    network.append(N.Conv2d(filter_size=(3,3), feature_map_multiplier=8))
-    network.append(N.FeaturePooling(4))
-    network.append(N.GlobalPooling())
-    network.append(N.FullConn(input_feature=128, output_feature=10))
-    network.append(N.SoftMax())
+    network.setInput(layers.RawInput((1, 28,28)))
+    network.append(layers.Conv2d(filter_size=(3,3), feature_map_multiplier=128))
+    network.append(layers.FeaturePooling(4))
+    network.append(layers.Pooling((2,2)))
+    network.append(layers.Conv2d(filter_size=(3,3), feature_map_multiplier=8))
+    network.append(layers.FeaturePooling(4))
+    network.append(layers.Pooling((2,2)))
+    network.append(layers.Conv2d(filter_size=(3,3), feature_map_multiplier=8))
+    network.append(layers.FeaturePooling(4))
+    network.append(layers.GlobalPooling())
+    network.append(layers.FullConn(input_feature=128, output_feature=10))
+    network.append(layers.SoftMax())
 
     network.build()
 
