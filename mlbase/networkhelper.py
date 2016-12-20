@@ -1022,6 +1022,7 @@ class Network(learner.SupervisedLearner):
 
     def build(self, reload=False):
         currentTensor = (self.X,)
+        currentPredictTensor = (self.X,)
 
         # TODO: learn from multiple source.
         self.params = []
@@ -1040,6 +1041,7 @@ class Network(learner.SupervisedLearner):
 
             self.params += layer.getpara()
             currentTensor = layer.forward(currentTensor)
+            currentPredictTensor = layer.predictForward(currentTensor)
             
             for extraUpdatesPair in layer.getExtraPara(currentTensor):
                 extraUpdates.append(extraUpdatesPair)
@@ -1055,7 +1057,7 @@ class Network(learner.SupervisedLearner):
         self.learner = theano.function(inputs=[self.X, self.Y],
                                        outputs=self.cost, updates=updates, allow_input_downcast=True)
         self.predicter = theano.function(inputs=[self.X],
-                                         outputs=currentTensor[0], allow_input_downcast=True)
+                                         outputs=currentPredictTensor[0], allow_input_downcast=True)
 
     def train(self, X, Y):
         headindex = list(range(0, len(X), self.batchsize))
