@@ -284,7 +284,7 @@ class Conv2d(Layer):
                                self.w,
                                border_mode=self.border,
                                subsample=self.subsample)
-        if self.need_bias:            
+        if self.bias:            
             return ((l3conv+self.b.dimshuffle('x', 0, 'x', 'x')), )
         else:
             return (l3conv, )
