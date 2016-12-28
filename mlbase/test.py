@@ -271,17 +271,17 @@ def test2():
 
     network.setInput(N.RawInput((1, 28,28)))
     network.append(N.Conv2d(feature_map_multiplier=32))
-    network.append(N.Relu())
+    network.append(act.Relu())
     network.append(N.Pooling())
     network.append(N.Conv2d(feature_map_multiplier=2))
-    network.append(N.Relu())
+    network.append(act.Relu())
     network.append(N.Pooling())
     network.append(N.Conv2d(feature_map_multiplier=2))
-    network.append(N.Relu())
+    network.append(act.Relu())
     network.append(N.Pooling())
     network.append(N.Flatten())
     network.append(N.FullConn(input_feature=1152, output_feature=1152*2))
-    network.append(N.Relu())
+    network.append(act.Relu())
     network.append(N.FullConn(input_feature=1152*2, output_feature=10))
     network.append(N.SoftMax())
 
@@ -353,5 +353,5 @@ def test1():
         print(1 - np.mean(np.argmax(teY, axis=1) == network.predict(teX)))
 
 if __name__ == "__main__":
-    test_maxout()
+    test2()
 

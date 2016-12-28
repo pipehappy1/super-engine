@@ -876,9 +876,12 @@ class Network(learner.SupervisedLearner):
     """
 
     def __init__(self):
-        self.reset()
+        self.initNetworkParameter()
 
     def reset(self):
+        self.build()
+
+    def initNetworkParameter(self):
         self.batchsize = 128
 
         """
@@ -1157,9 +1160,10 @@ class Network(learner.SupervisedLearner):
     def load(self, istream):
         """
         Load the model from input stream.
-        reset() is called to clean up network instance.
+        initNetworkParameter() is called to clean up network instance.
+        TODO: need to save and load this network class.
         """
-        self.reset()
+        self.initNetworkParameter()
         
         allLayer = {}
         for layer in yaml.load_all(istream):
