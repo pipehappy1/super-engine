@@ -253,7 +253,7 @@ class Conv2d(Layer):
     def __init__(self, filter_size=(3,3),
                  input_feature=None, output_feature=None,
                  feature_map_multiplier=None,
-                 subsample=(1,1), border='half', need_bias=False):
+                 subsample=(1,1), border='half'):
         """
         This 2d convolution deals with 4d tensor:
         (batch_size, feature map/channel, filter_row, filter_col)
@@ -269,13 +269,11 @@ class Conv2d(Layer):
         self.mapMulti = feature_map_multiplier
         self.border = border
         self.subsample = subsample
-        self.need_bias = need_bias
 
         self.w = None
-        self.b = None
         
     def getpara(self):
-        return [self.w, self.b]
+        return [self.w]
     
     def forward(self, inputtensor):
         inputimage = inputtensor[0]
@@ -284,10 +282,7 @@ class Conv2d(Layer):
                                self.w,
                                border_mode=self.border,
                                subsample=self.subsample)
-        if self.bias:            
-            return ((l3conv+self.b.dimshuffle('x', 0, 'x', 'x')), )
-        else:
-            return (l3conv, )
+        return (l3conv, )
         
     def forwardSize(self, inputsize):
         # [size1, size2, size3], size: (32,1,28,28)
@@ -307,9 +302,7 @@ class Conv2d(Layer):
         initweight = weightIniter.initialize((self.outputFeature,
                                               self.inputFeature,
                                               *self.filterSize))
-        initbias = np.zeros((self.outputFeature,))
         self.w = theano.shared(initweight, borrow=True)
-        self.b = theano.shared(initbias, borrow=True)
 
         retSize = None
         if self.border == 'half':
@@ -331,7 +324,6 @@ class Conv2d(Layer):
         objDict['border'] = self.border
         objDict['subsample'] = self.subsample
         objDict['w'] = self.w
-        objDict['b'] = self.b
 
         return objDict
 
@@ -343,7 +335,6 @@ class Conv2d(Layer):
         self.border = tmap['border']
         self.subsample = tmap['subsample']
         self.w = tmap['w']
-        self.b = tmap['b']
 
     @classmethod
     def to_yaml(cls, dumper, data):
@@ -596,7 +587,7 @@ class FullConn(Layer):
     LayerTypeName = 'FullConn'
     yaml_tag = u'!FullConn'
     
-    def __init__(self, times=None, output=None, input_feature=None, output_feature=None,need_bias=False):
+    def __init__(self, times=None, output=None, input_feature=None, output_feature=None):
         super(FullConn, self).__init__()
         if times is not None:
             self.times = times
@@ -606,25 +597,19 @@ class FullConn(Layer):
         weightIniter = winit.XavierInit()
         initweight = weightIniter.initialize((input_feature, output_feature))
         self.w = theano.shared(initweight, borrow=True)
-        initbias = np.zeros((output_feature,))
-        self.b = theano.shared(initbias, borrow=True)
 
         self.inputFeature = input_feature
         self.outputFeature = output_feature
         
         self.times = -1
-        self.output = -1
-        self.need_bias = need_bias
+        self.output = -1        
 
     def getpara(self):
-        return (self.w, self.b)
+        return (self.w, )
 
     def forward(self, inputtensor):
         inputimage = inputtensor[0]
-        if self.need_bias:
-            return ((T.dot(inputimage, self.w)+self.b), )
-        else:
-            return (T.dot(inputimage, self.w),)
+        return (T.dot(inputimage, self.w), )
 
     def forwardSize(self, inputsize):
 
@@ -647,7 +632,6 @@ class FullConn(Layer):
         objDict['inputFeature'] = self.inputFeature
         objDict['outputFeature'] = self.outputFeature
         objDict['w'] = self.w
-        objDict['b'] = self.b
 
         return objDict
 
@@ -656,7 +640,6 @@ class FullConn(Layer):
         self.inputFeature = tmap['inputFeature']
         self.outputFeature = tmap['outputFeature']
         self.w = tmap['w']
-        self.b = tmap['b']
 
     @classmethod
     def to_yaml(cls, dumper, data):
