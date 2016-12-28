@@ -307,7 +307,7 @@ class Conv2d(Layer):
         initweight = weightIniter.initialize((self.outputFeature,
                                               self.inputFeature,
                                               *self.filterSize))
-        initbias = np.zeros((self.outputFeature,))
+        initbias = floatX(np.zeros((self.outputFeature,)))
         self.w = theano.shared(initweight, borrow=True)
         self.b = theano.shared(initbias, borrow=True)
 
